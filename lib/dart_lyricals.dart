@@ -4,13 +4,12 @@
 /// - LrcLib (https://lrclib.net)
 /// - SimpMusic API (https://api-lyrics.simpmusic.org)
 /// - BetterLyrics API (https://lyrics-api.boidu.dev)
-library dart_lyricals;
+library;
 
 // Models
 export 'src/models/lrclib_track.dart';
 export 'src/models/simpmusic_response.dart';
-export 'src/models/better_lyrics_response.dart'
-    hide BetterLyrics; // Hide model class, provider class is exported below
+export 'src/models/better_lyrics_response.dart';
 export 'src/models/parsed_lyrics.dart';
 
 // Providers

@@ -1,3 +1,5 @@
+import '../utils/string_utils.dart';
+
 /// Lyrics wrapper class equivalent to Kotlin's inline value class.
 /// Provides convenient parsing of LRC format lyrics.
 class LrcLibLyrics {
@@ -121,10 +123,9 @@ extension LrcLibTrackListExtensions on List<LrcLibTrack> {
     }
 
     final sorted = List<LrcLibTrack>.from(this)
-      ..sort((a, b) =>
-          (a.duration.toInt() - duration).abs().compareTo(
-                (b.duration.toInt() - duration).abs(),
-              ));
+      ..sort((a, b) => (a.duration.toInt() - duration).abs().compareTo(
+            (b.duration.toInt() - duration).abs(),
+          ));
 
     final best = sorted.first;
     if ((best.duration.toInt() - duration).abs() <= 2) {
@@ -147,8 +148,8 @@ extension LrcLibTrackListExtensions on List<LrcLibTrack> {
     // First try to find synced lyrics within tolerance
     final syncedTracks = where((t) => t.syncedLyrics != null).toList();
     if (syncedTracks.isNotEmpty) {
-      syncedTracks.sort((a, b) =>
-          (a.duration.toInt() - duration).abs().compareTo(
+      syncedTracks
+          .sort((a, b) => (a.duration.toInt() - duration).abs().compareTo(
                 (b.duration.toInt() - duration).abs(),
               ));
       final syncedMatch = syncedTracks.first;
@@ -159,10 +160,9 @@ extension LrcLibTrackListExtensions on List<LrcLibTrack> {
 
     // Fall back to any lyrics within tolerance
     final sorted = List<LrcLibTrack>.from(this)
-      ..sort((a, b) =>
-          (a.duration.toInt() - duration).abs().compareTo(
-                (b.duration.toInt() - duration).abs(),
-              ));
+      ..sort((a, b) => (a.duration.toInt() - duration).abs().compareTo(
+            (b.duration.toInt() - duration).abs(),
+          ));
 
     final best = sorted.first;
     if ((best.duration.toInt() - duration).abs() <= 5) {
@@ -243,38 +243,9 @@ extension LrcLibTrackListExtensions on List<LrcLibTrack> {
         (str1.contains(str2) || str2.contains(str1)) ? 0.8 : 0.0;
 
     final maxLength = str1.length > str2.length ? str1.length : str2.length;
-    final distance = _levenshteinDistance(str1, str2);
+    final distance = levenshteinDistance(str1, str2);
     final distanceScore = 1.0 - (distance / maxLength);
 
     return containsScore > distanceScore ? containsScore : distanceScore;
-  }
-
-  int _levenshteinDistance(String str1, String str2) {
-    final len1 = str1.length;
-    final len2 = str2.length;
-    final matrix = List.generate(
-      len1 + 1,
-      (_) => List.filled(len2 + 1, 0),
-    );
-
-    for (var i = 0; i <= len1; i++) {
-      matrix[i][0] = i;
-    }
-    for (var j = 0; j <= len2; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (var i = 1; i <= len1; i++) {
-      for (var j = 1; j <= len2; j++) {
-        final cost = str1[i - 1] == str2[j - 1] ? 0 : 1;
-        matrix[i][j] = [
-          matrix[i - 1][j] + 1, // deletion
-          matrix[i][j - 1] + 1, // insertion
-          matrix[i - 1][j - 1] + cost, // substitution
-        ].reduce((a, b) => a < b ? a : b);
-      }
-    }
-
-    return matrix[len1][len2];
   }
 }

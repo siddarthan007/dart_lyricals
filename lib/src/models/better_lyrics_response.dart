@@ -26,8 +26,8 @@ class BetterLyricsSearchResponse {
     final resultsList = json['results'] as List<dynamic>?;
     return BetterLyricsSearchResponse(
       results: resultsList
-              ?.map((e) =>
-                  BetterLyricsTrack.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                  (e) => BetterLyricsTrack.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -44,7 +44,7 @@ class BetterLyricsTrack {
   final String artist;
   final String? album;
   final double duration;
-  final BetterLyrics? lyrics;
+  final BetterLyricsContent? lyrics;
 
   const BetterLyricsTrack({
     required this.title,
@@ -61,7 +61,7 @@ class BetterLyricsTrack {
       album: json['album'] as String?,
       duration: (json['duration'] as num?)?.toDouble() ?? 0.0,
       lyrics: json['lyrics'] != null
-          ? BetterLyrics.fromJson(json['lyrics'] as Map<String, dynamic>)
+          ? BetterLyricsContent.fromJson(json['lyrics'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -80,17 +80,16 @@ class BetterLyricsTrack {
 }
 
 /// Lyrics model containing lines.
-class BetterLyrics {
+class BetterLyricsContent {
   final List<BetterLyricsLine> lines;
 
-  const BetterLyrics({this.lines = const []});
+  const BetterLyricsContent({this.lines = const []});
 
-  factory BetterLyrics.fromJson(Map<String, dynamic> json) {
+  factory BetterLyricsContent.fromJson(Map<String, dynamic> json) {
     final linesList = json['lines'] as List<dynamic>?;
-    return BetterLyrics(
+    return BetterLyricsContent(
       lines: linesList
-              ?.map((e) =>
-                  BetterLyricsLine.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => BetterLyricsLine.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -101,7 +100,7 @@ class BetterLyrics {
       };
 
   @override
-  String toString() => 'BetterLyrics(lines: ${lines.length})';
+  String toString() => 'BetterLyricsContent(lines: ${lines.length})';
 }
 
 /// A single line of lyrics.
